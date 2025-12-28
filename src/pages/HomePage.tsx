@@ -12,7 +12,13 @@ export default function HomePage() {
 
   const [player, setPlayer] = useState<EmpireId>('primus');
   const [rivals, setRivals] = useState<EmpireId[]>(['xilnah']);
-  const [planetsToConquer, setPlanetsToConquer] = useState<number>(8);
+  // Difficulty presets.
+  // This setting controls BOTH:
+  // - planets required for victory (planetsToConquer)
+  // - number of "Planetas conquistados" slots shown in each empire sheet
+  type DifficultyMode = 'easy' | 'medium' | 'hard' | 'free';
+  const [difficulty, setDifficulty] = useState<DifficultyMode>('easy');
+  const [planetsToConquer, setPlanetsToConquer] = useState<number>(6);
   const importInputRef = useRef<HTMLInputElement | null>(null);
 
   const rivalOptions = useMemo(() => EMPIRES.map(e => e.id).filter(id => id !== player), [player]);
@@ -143,12 +149,38 @@ export default function HomePage() {
 
           <label className="field">
             <span>Dificultad (planetas a conquistar)</span>
-            <input
-              type="number"
-              min={1}
-              value={planetsToConquer}
-              onChange={(e) => setPlanetsToConquer(Math.max(1, Math.floor(Number(e.target.value) || 1)))}
-            />
+
+            <select
+              value={difficulty}
+              onChange={(e) => {
+                const v = e.target.value as DifficultyMode;
+                setDifficulty(v);
+                if (v === 'easy') setPlanetsToConquer(6);
+                else if (v === 'medium') setPlanetsToConquer(12);
+                else if (v === 'hard') setPlanetsToConquer(18);
+                else setPlanetsToConquer((prev) => Math.max(1, Math.min(18, Math.floor(Number(prev) || 6))));
+              }}
+            >
+              <option value="easy">Fácil (6 planetas)</option>
+              <option value="medium">Medio (12 planetas)</option>
+              <option value="hard">Difícil (18 planetas)</option>
+              <option value="free">Juego libre</option>
+            </select>
+
+            {difficulty === 'free' ? (
+              <div className="row wrap" style={{ alignItems: 'center', gap: 10, marginTop: 10 }}>
+                <span className="muted">Planetas a conquistar:</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={18}
+                  value={planetsToConquer}
+                  onChange={(e) => setPlanetsToConquer(Math.max(1, Math.min(18, Math.floor(Number(e.target.value) || 1))))}
+                  style={{ width: 110 }}
+                />
+              </div>
+            ) : null}
+
             <small className="muted">La dificultad depende del número de planetas a conquistar, no del nº de imperios.</small>
           </label>
 

@@ -119,6 +119,12 @@ const DEFAULT_FLEET_SLOTS = 12;
 const DEFAULT_PLANET_SLOTS = 18;
 const DEFAULT_CHARACTER_SLOTS = 6;
 
+function clampInt(n: any, min: number, max: number, fallback: number) {
+  const v = Math.floor(Number(n));
+  if (!Number.isFinite(v)) return fallback;
+  return Math.max(min, Math.min(max, v));
+}
+
 function emptySlots(n: number) {
   return Array.from({ length: n }, () => null as string | null);
 }
@@ -271,6 +277,7 @@ export const useGameStore = create<GameState>()(
       planetByNumber: {},
 
       newGame: (setup) => {
+        const planetSlotsCount = clampInt(setup?.planetsToConquer, 1, DEFAULT_PLANET_SLOTS, DEFAULT_PLANET_SLOTS);
         const turnOrder: EmpireId[] = [setup.playerEmpireId, ...setup.rivalEmpireIds];
         // init planets: slot 0 is natal planet placeholder record for each empire.
         const planets: Record<string, PlanetRecord> = {};
@@ -283,7 +290,7 @@ export const useGameStore = create<GameState>()(
           planets[natal.id] = natal;
           planetByNumber[natal.number] = natal.id;
 
-          const slots = emptySlots(DEFAULT_PLANET_SLOTS);
+          const slots = emptySlots(planetSlotsCount);
           slots[0] = natal.id;
           empirePlanetSlots[emp.id] = slots;
         }
@@ -897,14 +904,21 @@ export const useGameStore = create<GameState>()(
         const ensureSlots = (obj: any, slotsCount: number) => {
           if (!obj || typeof obj !== 'object') obj = {};
           for (const e of EMPIRES) {
-            const arr = Array.isArray(obj[e.id]) ? obj[e.id] : emptySlots(slotsCount);
+            let arr = Array.isArray(obj[e.id]) ? obj[e.id] : emptySlots(slotsCount);
+            // Normalize length to slotsCount (pads with nulls or trims).
+            if (arr.length < slotsCount) {
+              arr = [...arr, ...emptySlots(slotsCount - arr.length)];
+            } else if (arr.length > slotsCount) {
+              arr = arr.slice(0, slotsCount);
+            }
             obj[e.id] = arr;
           }
           return obj;
         };
 
         next.empireFleetSlots = ensureSlots(next.empireFleetSlots, DEFAULT_FLEET_SLOTS);
-        next.empirePlanetSlots = ensureSlots(next.empirePlanetSlots, DEFAULT_PLANET_SLOTS);
+        const planetSlotsCount = clampInt(next.setup?.planetsToConquer, 1, DEFAULT_PLANET_SLOTS, DEFAULT_PLANET_SLOTS);
+        next.empirePlanetSlots = ensureSlots(next.empirePlanetSlots, planetSlotsCount);
         next.empireCharacterSlots = ensureSlots(next.empireCharacterSlots, DEFAULT_CHARACTER_SLOTS);
 
         // De-duplicate character ids inside the player's slots (double-click / old bug).
