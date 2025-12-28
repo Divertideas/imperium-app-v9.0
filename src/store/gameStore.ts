@@ -112,8 +112,11 @@ export type GameState = {
   getCurrentEmpire: () => EmpireId | undefined;
 };
 
-const DEFAULT_FLEET_SLOTS = 10;
-const DEFAULT_PLANET_SLOTS = 10;
+// Empire sheet capacities (UI slots)
+// - Planets conquered: 18 slots
+// - Fleet: 12 slots
+const DEFAULT_FLEET_SLOTS = 12;
+const DEFAULT_PLANET_SLOTS = 18;
 const DEFAULT_CHARACTER_SLOTS = 6;
 
 function emptySlots(n: number) {
