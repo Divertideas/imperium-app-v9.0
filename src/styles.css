@@ -303,6 +303,12 @@ button.mini{padding:6px 10px; border-radius:10px}
 .instructionsH2{
   margin: 18px 0 10px;
   font-size: 18px;
+  color: var(--accent);
+  background: rgba(106,167,255,.12);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 8px 10px;
 }
 .instructionsP{
   margin: 8px 0;
