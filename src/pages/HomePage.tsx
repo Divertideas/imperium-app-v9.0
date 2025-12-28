@@ -24,14 +24,15 @@ export default function HomePage() {
         Esta app es un complemento del librojuego. La mayoría de datos se registran manualmente.
       </p>
 
-      <div style={{ marginBottom: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <button className="btn" type="button" onClick={() => navigate('/instructions')}>
-          Instrucciones
-        </button>
-      </div>
+      
 
       <div className="card">
-        <h2>Cómo usar esta app con el libro</h2>
+        <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+          <h2 style={{ margin: 0 }}>Cómo usar esta app con el libro</h2>
+          <button className="ghost" type="button" onClick={() => navigate('/instructions')}>
+            Instrucciones
+          </button>
+        </div>
         <ol className="muted" style={{ lineHeight: 1.6 }}>
           <li><strong>Lee el librojuego</strong> y usa la app como hoja de registro (créditos, fichas, turnos y combates).</li>
           <li><strong>No decide por ti:</strong> la app te ayuda a anotar, y el libro te dice las reglas / efectos.</li>

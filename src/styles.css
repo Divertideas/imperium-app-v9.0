@@ -292,3 +292,33 @@ button.mini{padding:6px 10px; border-radius:10px}
   line-height: 1.5;
   color: var(--text);
 }
+
+/* Instructions page */
+.instructions {
+  line-height: 1.55;
+}
+.instructionsIntro{
+  margin-bottom: 14px;
+}
+.instructionsH2{
+  margin: 18px 0 10px;
+  font-size: 18px;
+}
+.instructionsP{
+  margin: 8px 0;
+}
+.instructionsList{
+  margin: 8px 0 8px 18px;
+}
+.instructionsTocTitle{
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.instructionsToc{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+.instructionsSection{
+  padding-top: 6px;
+}
