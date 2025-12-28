@@ -8,10 +8,26 @@ function scrollToId(id: string) {
   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+
+function isSubheading(text: string) {
+  const t = text.trim();
+  if (!t) return false;
+  // Heuristic: short standalone lines used as subheadings in the manual
+  const words = t.split(/\s+/).filter(Boolean);
+  if (words.length > 7) return false;
+  if (t.length > 60) return false;
+  // allow trailing ":" (e.g., "Al importar:")
+  if (/[.!?]$/.test(t)) return false;
+  // must start with a letter and typically capitalized
+  if (!/^[A-Za-zÁÉÍÓÚÜÑ]/.test(t)) return false;
+  return true;
+}
+
 function renderBlock(block: InstructionBlock, idx: number) {
   if (block.type === 'p') {
+    const cls = isSubheading(block.text) ? 'instructionsSubhead' : 'instructionsP';
     return (
-      <p key={`p-${idx}`} className="instructionsP">
+      <p key={`p-${idx}`} className={cls}>
         {block.text}
       </p>
     );

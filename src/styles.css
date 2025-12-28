@@ -310,6 +310,13 @@ button.mini{padding:6px 10px; border-radius:10px}
   border-radius: 10px;
   padding: 8px 10px;
 }
+
+.instructionsSubhead{
+  margin: 12px 0 6px;
+  font-weight: 700;
+  color: #7fb4ff; /* secondary highlight for subheadings */
+}
+
 .instructionsP{
   margin: 8px 0;
 }
